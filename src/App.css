@@ -8,6 +8,32 @@ nav {
 	font-size: 24px;
 }
 
+nav div {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	width: 25%;
+	height: 100%;
+}
+
+nav a {
+	padding: 8px;
+	color: white;
+}
+
+nav a:visited {
+	color: #cccccc;
+}
+
+nav a {
+	/* text-decoration: none; */
+	text-align: center;
+	position: relative;
+	margin: 20px;
+	flex-grow: 1;
+	cursor: pointer;
+}
+
 aside {
 	width: 10%;
 	min-height: 50vh;
