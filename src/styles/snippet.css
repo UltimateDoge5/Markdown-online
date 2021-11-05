@@ -1,0 +1,15 @@
+aside {
+	text-align: center;
+}
+
+.snippet {
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+	width: 100%;
+	padding: 8px 0px 8px 0px;
+	height: 32px;
+}
+
+.snippet:hover {
+	background-color: #111236;
+}

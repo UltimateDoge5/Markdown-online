@@ -58,4 +58,5 @@ main div {
 
 main div {
 	border-left: 0 !important;
+	overflow: auto;
 }
