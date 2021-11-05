@@ -1,10 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-// import App from "./App";
 import "./index.css";
-import PageRouter from "./Router";
-// import Router from "./Router";
+import PageRouter from "./router";
 
 ReactDOM.render(
 	<React.StrictMode>
