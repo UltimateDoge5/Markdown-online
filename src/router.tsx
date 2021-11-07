@@ -6,9 +6,7 @@ const PageRouter = () => {
 		<Routes>
 			<Route path="/" element={<App />} />
 			{/* <Route index element={<Home />} /> */}
-			<Route path="*">
-				<h1>Page not found</h1>
-			</Route>
+			<Route path="*">{/* <h1>Page not found</h1> */}</Route>
 		</Routes>
 	);
 };

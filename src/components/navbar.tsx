@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-// import { ReactSVG } from "react-svg";
+import { ReactComponent as Logo } from "../svg/Logo.svg";
 
 const Navbar = () => {
 	return (
 		<nav>
-			<span>//Logo //</span>
-			{/* <ReactSVG src={"../svg/Logo.svg"} alt="Logo" /> */}
+			<span>Logo</span>
+			{/* <Logo /> */}
 			<div>
 				<Link to="/">Editor</Link>
 				<Link to="/cheatsheet">Cheat sheet</Link>
