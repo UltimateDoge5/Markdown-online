@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
+import "./styles/index.css";
 import PageRouter from "./router";
 
 ReactDOM.render(

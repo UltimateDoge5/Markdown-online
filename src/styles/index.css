@@ -1,0 +1,41 @@
+@import-normalize;
+@font-face {
+	font-family: Raleway;
+	src: url("../fonts/Raleway-Regular.ttf");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Raleway-Medium;
+	src: url("../fonts/Raleway-Medium.ttf");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Raleway-Light;
+	src: url("../fonts/Raleway-Light.ttf");
+	font-display: swap;
+}
+
+:root {
+	--background: #0c0d26;
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, "Raleway";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body,
+#root {
+	width: 100vw;
+	min-height: 100vh;
+	background-color: var(--background);
+	color: white;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
