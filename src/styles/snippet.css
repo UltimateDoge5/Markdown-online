@@ -1,13 +1,21 @@
 aside {
 	text-align: center;
+	border-collapse: collapse;
 }
 
 .snippet {
-	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
 	cursor: pointer;
 	width: 100%;
 	padding: 8px 0px 8px 0px;
 	height: 32px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.snippet:last-child {
+	border-bottom: 1px solid #ccc;
 }
 
 .snippet:hover {
