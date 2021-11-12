@@ -46,13 +46,82 @@ function App() {
 
 const parseMarkdown = (text: string) => {
 	//Parse markdown to html elements string
-	// let html: string[] = [];
 	const lines = text.split("\n");
 
-	// for (let line of lines) {
 	return lines
 		.map((line, index) => {
 			line = line.trim();
+
+			if (line.includes("*")) {
+				const separateString = (string: string, character: string) => {
+					let parts = [];
+					let buffer = "";
+					for (let char of string) {
+						if (char !== character) {
+							buffer += char;
+						} else {
+							if (buffer.length > 0) {
+								parts.push(buffer);
+							}
+
+							parts.push(character);
+							buffer = "";
+						}
+					}
+					return parts;
+				};
+
+				const sentences = separateString(line, "*");
+				const realSentences = sentences.filter((sentence) => sentence.trim() !== "*");
+
+				return realSentences
+					.map((sentence) => {
+						const sentencePosition = sentences.indexOf(sentence);
+						let prefixes = 0;
+						let suffixes = 0;
+
+						//Go from the sentence to the beginning of the line and search for asterisks
+						for (let i = sentencePosition - 1; i >= 0; i--) {
+							const character = sentences[i].trim();
+
+							if (character === "*") {
+								prefixes++;
+							} else {
+								break;
+							}
+						}
+
+						//Go from the sentence to the end of the line and search for asterisks
+						for (let i = sentencePosition + 1; i < sentences.length; i++) {
+							const character = sentences[i].trim();
+
+							if (character === "*") {
+								suffixes++;
+							} else {
+								break;
+							}
+						}
+
+						if (prefixes !== 0 && suffixes !== 0) {
+							sentences.splice(sentencePosition - prefixes, suffixes + prefixes + 1);
+						}
+
+						switch (Math.min(prefixes, suffixes)) {
+							case 0:
+								return sentence;
+							case 1:
+								return `<i>${sentence}</i>`;
+
+							case 2:
+								return `<b>${sentence}</b>`;
+
+							case 3:
+							default:
+								return `<b><i>${sentence}</i></b>`;
+						}
+					})
+					.join("");
+			}
 
 			switch (line[0]) {
 				case "#":
@@ -76,19 +145,11 @@ const parseMarkdown = (text: string) => {
 
 				case ">":
 					return `<blockquote>${line.substr(1)}</blockquote>`;
-				case "_":
-				case "*":
-					if (
-						(line.substr(0, 2) === "**" && line.substr(-2) === "**" && line.length > 4) ||
-						(line.substr(0, 2) === "__" && line.substr(-2) === "__" && line.length > 4)
-					) {
-						console.log(line, line.substr(2, line.length - 4));
-						return `<strong>${line.substr(2, line.length - 4)}</strong>`;
-					}
-
-					return `<p>${line}</p>`;
 				default:
+					// if (index - 1 > 0 && lines[index - 1] === "\n") {
 					return `<p>${line}</p>`;
+				// } else if ("") {
+				// }
 			}
 		})
 		.join("\n");
