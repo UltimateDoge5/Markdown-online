@@ -46,44 +46,52 @@ function App() {
 
 const parseMarkdown = (text: string) => {
 	//Parse markdown to html elements string
-	let html = "";
+	// let html: string[] = [];
 	const lines = text.split("\n");
 
-	for (let line of lines) {
-		line = line.trim();
+	// for (let line of lines) {
+	return lines
+		.map((line, index) => {
+			line = line.trim();
 
-		switch (line[0]) {
-			case "#":
-				let heading = 0;
+			switch (line[0]) {
+				case "#":
+					let heading = 0;
 
-				for (let i = 0; i < line.length; i++) {
-					if (line[i] === "#" && heading < 6) {
-						heading++;
-					} else {
-						break;
+					for (let i = 0; i < line.length; i++) {
+						if (line[i] === "#" && heading < 6) {
+							heading++;
+						} else {
+							break;
+						}
 					}
-				}
 
-				if (line[heading] !== " ") {
-					html += `<p>${line}</p>`;
-					break;
-				}
+					if (line[heading] !== " ") {
+						return `<p>${line}</p>`;
+					}
 
-				html += `<h${heading}>${line.substr(heading)}</h${heading}>`;
-				break;
-			case "-":
-				html += `<ul><li>${line.substr(1)}</li></ul>`;
-				break;
-			case ">":
-				html += `<blockquote>${line.substr(1)}</blockquote>`;
-				break;
-			default:
-				html += `<p>${line}</p>`;
-				break;
-		}
-	}
+					return `<h${heading}>${line.substr(heading)}</h${heading}>`;
+				case "-":
+					return `<ul><li>${line.substr(1)}</li></ul>`;
 
-	return html;
+				case ">":
+					return `<blockquote>${line.substr(1)}</blockquote>`;
+				case "_":
+				case "*":
+					if (
+						(line.substr(0, 2) === "**" && line.substr(-2) === "**" && line.length > 4) ||
+						(line.substr(0, 2) === "__" && line.substr(-2) === "__" && line.length > 4)
+					) {
+						console.log(line, line.substr(2, line.length - 4));
+						return `<strong>${line.substr(2, line.length - 4)}</strong>`;
+					}
+
+					return `<p>${line}</p>`;
+				default:
+					return `<p>${line}</p>`;
+			}
+		})
+		.join("\n");
 };
 
 export default App;

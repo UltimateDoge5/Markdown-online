@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ReactComponent as Logo } from "../svg/Logo.svg";
+// import { ReactComponent as Logo } from "../svg/Logo.svg";
 
 const Navbar = () => {
 	return (
