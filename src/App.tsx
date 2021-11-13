@@ -49,9 +49,12 @@ const parseMarkdown = (text: string) => {
 	//Parse markdown to html elements string
 	const lines = text.split("\n");
 
+	//[Is paragraph, was last line paragraph]
+	// let isParagraph = [false, false];
+
 	return lines
 		.map((line, index) => {
-			line = line.trim();
+			line = line.trimLeft();
 
 			if (line.includes("*")) {
 				const separateString = (string: string, character: string) => {
@@ -116,7 +119,7 @@ const parseMarkdown = (text: string) => {
 							case 0:
 								return sentence;
 							case 1:
-								return `<i>${sentence}</i>`;
+								return `<em>${sentence}</em>`;
 
 							case 2:
 								return `<b>${sentence}</b>`;
@@ -155,10 +158,28 @@ const parseMarkdown = (text: string) => {
 				case "\n":
 					return "";
 				default:
-					// if (index - 1 > 0 && lines[index - 1] === "\n") {
-					return `<p>${line}</p>`;
-				// } else if ("") {
-				// }
+					if (line.length === 0) return "";
+
+					const lineBrake = index - 1 >= 0 ? lines[index - 1].substr(lines[index - 1].length - 2) === "  " : false;
+					const preLineBrake = index - 1 >= 0 ? lines[index - 1] === "" : true;
+					const afterLineBrake = index + 1 < lines.length ? lines[index + 1] === "" : true;
+					let paragraph = "";
+
+					if (lineBrake) {
+						paragraph += "<br>";
+					}
+
+					if (preLineBrake) {
+						paragraph += "<p>";
+					}
+
+					paragraph += line;
+
+					if (afterLineBrake) {
+						paragraph += "</p>";
+					}
+
+					return paragraph;
 			}
 		})
 		.join("\n");
