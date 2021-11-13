@@ -12,15 +12,15 @@ function App() {
 		outputRef.current.innerHTML = parseMarkdown(markdown);
 	}
 
-	const Snippet = ({ symbol, text }: SnippetProps) => {
+	const Snippet = ({ prefix, suffix = "", text }: SnippetProps) => {
 		return (
 			<div
 				className="snippet"
 				onClick={() => {
-					setMarkdown(markdown + "\n" + symbol + text);
+					setMarkdown(markdown + "\n" + prefix + text + suffix);
 				}}
 			>
-				<b>{symbol}</b> {text}
+				<span>{prefix}</span> {text} <span>{suffix}</span>
 			</div>
 		);
 	};
@@ -30,14 +30,15 @@ function App() {
 			<Navbar />
 			<aside id="cheatsheet">
 				<h1>Cheatsheet</h1>
-				<Snippet symbol="#" text="Header" />
-				<Snippet symbol="-" text="List element" />
-				<Snippet symbol=">" text="Block quote" />
+				<Snippet prefix="#" text="Header" />
+				<Snippet prefix="-" text="List element" />
+				<Snippet prefix=">" text="Block quote" />
+				<Snippet prefix="**" suffix="**" text="Bold" />
 			</aside>
 			<main>
 				<textarea onChange={(e) => setMarkdown(e.target.value)} value={markdown}></textarea>
 				<div ref={outputRef}>
-					<h1>Markup online</h1>
+					<h1>Welcome to Markdown online</h1>
 				</div>
 			</main>
 		</>
@@ -68,6 +69,11 @@ const parseMarkdown = (text: string) => {
 							buffer = "";
 						}
 					}
+
+					if (buffer.length > 0) {
+						parts.push(buffer);
+					}
+
 					return parts;
 				};
 
@@ -102,7 +108,7 @@ const parseMarkdown = (text: string) => {
 							}
 						}
 
-						if (prefixes !== 0 && suffixes !== 0) {
+						if (prefixes > 0 && suffixes > 0) {
 							sentences.splice(sentencePosition - prefixes, suffixes + prefixes + 1);
 						}
 
@@ -145,6 +151,9 @@ const parseMarkdown = (text: string) => {
 
 				case ">":
 					return `<blockquote>${line.substr(1)}</blockquote>`;
+
+				case "\n":
+					return "";
 				default:
 					// if (index - 1 > 0 && lines[index - 1] === "\n") {
 					return `<p>${line}</p>`;

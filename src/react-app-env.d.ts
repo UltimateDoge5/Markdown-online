@@ -1,6 +1,7 @@
 /// <reference types="react-scripts" />
 
 interface SnippetProps {
-	symbol: string;
+	prefix: string;
+	suffix?: string;
 	text: string;
 }
