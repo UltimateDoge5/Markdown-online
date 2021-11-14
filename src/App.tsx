@@ -68,6 +68,7 @@ function App() {
 								}
 								break;
 						}
+
 						setMarkdown(textarea.value);
 					}}
 					onChange={(e) => {
@@ -110,7 +111,26 @@ const parseMarkdown = (text: string): string => {
 
 					return `<h${heading}>${line.substr(heading)}</h${heading}>`;
 				case "-":
-					return `<ul><li>${line.substr(1)}</li></ul>`;
+					//Wrap in an anonymous function to prevent block scoped variable name issues
+					if (line[1] !== " ") return line;
+
+					return (() => {
+						const preLineBrake = index - 1 >= 0 ? lines[index - 1][0] === "-" : true;
+						const afterLineBrake = index + 1 < lines.length ? lines[index + 1][0] !== "-" : true;
+						let listElement = "";
+
+						if (preLineBrake === false) {
+							listElement += "<ul>";
+						}
+
+						listElement += `<li>${boldify(line.substr(1))}</li>`;
+
+						if (afterLineBrake) {
+							listElement += "</ul>";
+						}
+
+						return listElement;
+					})();
 
 				case ">":
 					//Wrap in an anonymous function to prevent block scoped variable name issues
@@ -118,21 +138,21 @@ const parseMarkdown = (text: string): string => {
 						//TODO: Add support for nested block quotes
 						const preLineBrake = index - 1 >= 0 ? lines[index - 1][0] === ">" : true;
 						const afterLineBrake = index + 1 < lines.length ? lines[index + 1][0] !== ">" : true;
-						let paragraph = "";
+						let blockquote = "";
 
 						if (preLineBrake === false) {
-							paragraph += "<blockquote>";
+							blockquote += "<blockquote>";
 						} else {
-							paragraph += "<br>";
+							blockquote += "<br>";
 						}
 
-						paragraph += boldify(line.substr(1));
+						blockquote += boldify(line.substr(1));
 
 						if (afterLineBrake) {
-							paragraph += "</blockquote>";
+							blockquote += "</blockquote>";
 						}
 
-						return paragraph;
+						return blockquote;
 					})();
 				default:
 					if (line.length === 0) return "";
