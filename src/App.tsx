@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Navbar from "./components/navbar";
 import "./styles/App.css";
 import "./styles/snippet.css";
+import { boldify } from "./tools";
 
 function App() {
 	const [markdown, setMarkdown] = useState("# Welcome to Markdown online");
@@ -36,7 +37,7 @@ function App() {
 				<Snippet prefix="**" suffix="**" text="Bold" />
 			</aside>
 			<main>
-				<textarea onChange={(e) => setMarkdown(e.target.value)} value={markdown}></textarea>
+				<textarea onChange={(e) => setMarkdown(e.target.value)} lang="en-gb" value={markdown} autoFocus></textarea>
 				<div ref={outputRef}>
 					<h1>Welcome to Markdown online</h1>
 				</div>
@@ -45,7 +46,7 @@ function App() {
 	);
 }
 
-const parseMarkdown = (text: string) => {
+const parseMarkdown = (text: string): string => {
 	//Parse markdown to html elements string
 	const lines = text.split("\n");
 
@@ -55,82 +56,6 @@ const parseMarkdown = (text: string) => {
 	return lines
 		.map((line, index) => {
 			line = line.trimLeft();
-
-			if (line.includes("*")) {
-				const separateString = (string: string, character: string) => {
-					let parts = [];
-					let buffer = "";
-					for (let char of string) {
-						if (char !== character) {
-							buffer += char;
-						} else {
-							if (buffer.length > 0) {
-								parts.push(buffer);
-							}
-
-							parts.push(character);
-							buffer = "";
-						}
-					}
-
-					if (buffer.length > 0) {
-						parts.push(buffer);
-					}
-
-					return parts;
-				};
-
-				const sentences = separateString(line, "*");
-				const realSentences = sentences.filter((sentence) => sentence.trim() !== "*");
-
-				return realSentences
-					.map((sentence) => {
-						const sentencePosition = sentences.indexOf(sentence);
-						let prefixes = 0;
-						let suffixes = 0;
-
-						//Go from the sentence to the beginning of the line and search for asterisks
-						for (let i = sentencePosition - 1; i >= 0; i--) {
-							const character = sentences[i].trim();
-
-							if (character === "*") {
-								prefixes++;
-							} else {
-								break;
-							}
-						}
-
-						//Go from the sentence to the end of the line and search for asterisks
-						for (let i = sentencePosition + 1; i < sentences.length; i++) {
-							const character = sentences[i].trim();
-
-							if (character === "*") {
-								suffixes++;
-							} else {
-								break;
-							}
-						}
-
-						if (prefixes > 0 && suffixes > 0) {
-							sentences.splice(sentencePosition - prefixes, suffixes + prefixes + 1);
-						}
-
-						switch (Math.min(prefixes, suffixes)) {
-							case 0:
-								return sentence;
-							case 1:
-								return `<em>${sentence}</em>`;
-
-							case 2:
-								return `<b>${sentence}</b>`;
-
-							case 3:
-							default:
-								return `<b><i>${sentence}</i></b>`;
-						}
-					})
-					.join("");
-			}
 
 			switch (line[0]) {
 				case "#":
@@ -153,7 +78,26 @@ const parseMarkdown = (text: string) => {
 					return `<ul><li>${line.substr(1)}</li></ul>`;
 
 				case ">":
-					return `<blockquote>${line.substr(1)}</blockquote>`;
+					//Wrap in an anonymous function to prevent block scoped variable name issues
+					return (() => {
+						const preLineBrake = index - 1 >= 0 ? lines[index - 1][0] === ">" : true;
+						const afterLineBrake = index + 1 < lines.length ? lines[index + 1][0] !== ">" : true;
+						let paragraph = "";
+
+						if (preLineBrake === false) {
+							paragraph += "<blockquote>";
+						} else {
+							paragraph += "<br>";
+						}
+
+						paragraph += boldify(line.substr(1));
+
+						if (afterLineBrake) {
+							paragraph += "</blockquote>";
+						}
+
+						return paragraph;
+					})();
 
 				case "\n":
 					return "";
@@ -173,7 +117,7 @@ const parseMarkdown = (text: string) => {
 						paragraph += "<p>";
 					}
 
-					paragraph += line;
+					paragraph += boldify(line);
 
 					if (afterLineBrake) {
 						paragraph += "</p>";

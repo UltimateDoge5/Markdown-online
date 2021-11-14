@@ -49,14 +49,31 @@ main {
 main textarea,
 main div {
 	width: 50%;
+	padding: 8px;
 	min-height: 50vh;
 	background-color: var(--background);
 	color: #cccccc;
 	border-top: 0 !important;
 	border: 1px solid #cccccc;
+	overflow: auto;
+}
+
+main textarea {
+	resize: none;
 }
 
 main div {
 	border-left: 0 !important;
 	overflow: auto;
+}
+
+blockquote {
+	background-color: #cccccc44;
+	border-left: 4px solid #aaaaaa;
+	padding: 6px !important;
+}
+
+blockquote > blockquote {
+	padding: 6px !important;
+	padding-left: 4px !important;
 }
