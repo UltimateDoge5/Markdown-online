@@ -37,7 +37,45 @@ function App() {
 				<Snippet prefix="**" suffix="**" text="Bold" />
 			</aside>
 			<main>
-				<textarea onChange={(e) => setMarkdown(e.target.value)} lang="en-gb" value={markdown} autoFocus></textarea>
+				<textarea
+					onKeyDown={(e) => {
+						const textarea = e.target as HTMLTextAreaElement;
+						switch (e.key) {
+							case "Tab":
+								e.preventDefault();
+								textarea.value =
+									textarea.value.substring(0, textarea.selectionStart) +
+									"    " +
+									textarea.value.substring(textarea.selectionStart, textarea.value.length);
+								textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + "    ".length;
+								break;
+							case "Backspace":
+								if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
+									textarea.value =
+										textarea.value.substring(0, textarea.selectionStart - 3) +
+										textarea.value.substring(textarea.selectionStart, textarea.value.length);
+									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
+								}
+								break;
+							case "LeftArrow":
+								if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
+									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
+								}
+								break;
+							case "RightArrow":
+								if (textarea.value.substring(textarea.selectionStart + 4, textarea.selectionStart) === "    ") {
+									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + 3;
+								}
+								break;
+						}
+						setMarkdown(textarea.value);
+					}}
+					onChange={(e) => {
+						setMarkdown(e.target.value);
+					}}
+					value={markdown}
+					autoFocus
+				></textarea>
 				<div ref={outputRef}>
 					<h1>Welcome to Markdown online</h1>
 				</div>
@@ -49,9 +87,6 @@ function App() {
 const parseMarkdown = (text: string): string => {
 	//Parse markdown to html elements string
 	const lines = text.split("\n");
-
-	//[Is paragraph, was last line paragraph]
-	// let isParagraph = [false, false];
 
 	return lines
 		.map((line, index) => {
@@ -80,6 +115,7 @@ const parseMarkdown = (text: string): string => {
 				case ">":
 					//Wrap in an anonymous function to prevent block scoped variable name issues
 					return (() => {
+						//TODO: Add support for nested block quotes
 						const preLineBrake = index - 1 >= 0 ? lines[index - 1][0] === ">" : true;
 						const afterLineBrake = index + 1 < lines.length ? lines[index + 1][0] !== ">" : true;
 						let paragraph = "";
@@ -98,9 +134,6 @@ const parseMarkdown = (text: string): string => {
 
 						return paragraph;
 					})();
-
-				case "\n":
-					return "";
 				default:
 					if (line.length === 0) return "";
 

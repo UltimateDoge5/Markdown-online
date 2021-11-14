@@ -3,7 +3,7 @@
  * @param {string} string - A string to be formatted.
  * @return {string} A HTML string with properly bold and itallic text.
  */
-export const boldify = (line: string) => {
+export const boldify = (line: string): string => {
 	if (line.includes("*")) {
 		const sentences = separateString(line, "*");
 		const realSentences = sentences.filter((sentence) => sentence.trim() !== "*");
@@ -51,7 +51,7 @@ export const boldify = (line: string) => {
 
 					case 3:
 					default:
-						return `<b><i>${sentence}</i></b>`;
+						return `<b><em>${sentence}</em></b>`;
 				}
 			})
 			.join("");
@@ -61,6 +61,7 @@ export const boldify = (line: string) => {
 };
 
 /**
+ * Function upon finding the given character in the string separates it into two strings inside the array.
  * @param {string} string - A string to be devided.
  * @param {string} character - The character to be used to divide the string.
  * @return {string[]} An array of strings that separated upon the character.
