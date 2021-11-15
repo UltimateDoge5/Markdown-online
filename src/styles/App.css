@@ -12,7 +12,7 @@ nav div {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
-	width: 25%;
+	width: 27%;
 	height: 100%;
 }
 
@@ -34,22 +34,17 @@ nav a {
 	cursor: pointer;
 }
 
-aside {
-	width: 10%;
-	min-height: 50vh;
-	float: left;
-}
-
 main {
-	width: 90%;
+	width: 85%;
 	display: flex;
 	float: left;
+	height: calc(100vh - 64px);
 }
 
 main textarea,
 main div {
 	width: 50%;
-	padding: 8px;
+	padding: 2px;
 	min-height: 50vh;
 	background-color: var(--background);
 	color: #cccccc;
@@ -60,6 +55,10 @@ main div {
 
 main textarea {
 	resize: none;
+}
+
+main textarea:focus {
+	outline: none;
 }
 
 main div {
@@ -76,4 +75,29 @@ blockquote {
 blockquote > blockquote {
 	padding: 6px !important;
 	padding-left: 4px !important;
+}
+
+@media (max-width: 575.98px) {
+	main {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	main textarea,
+	main div {
+		width: 100%;
+	}
+}
+
+@media (max-width: 767.98px) {
+	main {
+		width: 100%;
+	}
+}
+
+@media (max-width: 1199.98px) {
+	nav div {
+		width: 45%;
+	}
 }

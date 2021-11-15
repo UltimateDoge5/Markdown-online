@@ -21,7 +21,9 @@ function App() {
 					setMarkdown(markdown + "\n" + prefix + text + suffix);
 				}}
 			>
-				<span>{prefix}</span> {text} <span>{suffix}</span>
+				<span>
+					<span>{prefix}</span> {text} <span>{suffix}</span>
+				</span>
 			</div>
 		);
 	};
@@ -38,6 +40,7 @@ function App() {
 			</aside>
 			<main>
 				<textarea
+					wrap="off"
 					onKeyDown={(e) => {
 						const textarea = e.target as HTMLTextAreaElement;
 						switch (e.key) {
