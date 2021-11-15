@@ -6,6 +6,7 @@ nav {
 	justify-content: space-around;
 	align-items: center;
 	font-size: 24px;
+	box-sizing: border-box;
 }
 
 nav div {

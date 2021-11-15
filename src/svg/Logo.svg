@@ -1,24 +1,20 @@
-<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_5:4)">
-<rect width="500" height="500" fill="#0C0D26"/>
-<path d="M329.08 378V210.24L263.56 335.16H235.84L170.32 210.24V378H120.64V122.4H173.92L249.52 267.84L325.84 122.4H378.76V378H329.08Z" fill="white"/>
-<g clip-path="url(#clip1_5:4)">
-<path d="M413.916 67.0495C433.182 79.5371 446.381 98.5579 451.088 120.607L463.782 117.897C458.356 92.4578 443.152 70.5281 420.977 56.1552C398.798 41.7878 372.575 36.8586 347.138 42.2936L349.848 54.9881C371.897 50.281 394.649 54.5619 413.916 67.0495ZM415.478 132.321C409.586 104.723 381.294 86.3854 353.697 92.2769L356.407 104.971C377.118 100.55 398.362 114.319 402.783 135.031L415.478 132.321Z" fill="white"/>
-<path d="M441.186 125.668C432.43 84.6115 390.329 57.3238 349.276 66.0973L351.986 78.7917C386.164 71.4953 421.195 94.2004 428.491 128.378L441.186 125.668Z" fill="white"/>
+<svg width="164" height="63" viewBox="0 0 164 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_10_9)">
+<rect width="164" height="64" fill="#0C0D26"/>
+<path d="M43.0385 50.4756V26.5353L33.5963 44.3621H29.6016L20.1594 26.5353V50.4756H13V14H20.6782L31.573 34.7552L42.5716 14H50.1979V50.4756H43.0385Z" fill="white"/>
+<path d="M46.5 54L41 50.5H44.0494L44.0556 45H48.9444V50.5H52L46.5 54Z" fill="white" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+<g clip-path="url(#clip1_10_9)">
+<path d="M55.3411 7.51312C57.7833 9.09602 59.4563 11.5071 60.053 14.302L61.6621 13.9585C60.9743 10.7338 59.047 7.95407 56.2362 6.13219C53.4248 4.31099 50.1008 3.68618 46.8764 4.37512L47.22 5.98424C50.0149 5.38758 52.8989 5.93022 55.3411 7.51312ZM55.5391 15.7868C54.7923 12.2886 51.206 9.96411 47.7079 10.7109L48.0514 12.32C50.6767 11.7596 53.3695 13.5049 53.93 16.1303L55.5391 15.7868Z" fill="white"/>
+<path d="M58.7978 14.9435C57.688 9.73922 52.3513 6.28029 47.1475 7.39239L47.4911 9.00151C51.8234 8.07664 56.2638 10.9547 57.1887 15.287L58.7978 14.9435Z" fill="white"/>
 </g>
-<g clip-path="url(#clip2_5:4)">
-<path d="M354 410.75L308.25 379.833H333.616L333.667 331.25H374.333V379.833H399.75L354 410.75Z" fill="white" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Raleway" font-size="18" letter-spacing="0em"><tspan x="66.1953" y="27.854">Markdown</tspan><tspan x="83.0879" y="48.854">Online</tspan></text>
 </g>
 <defs>
-<clipPath id="clip0_5:4">
-<rect width="500" height="500" fill="white"/>
+<clipPath id="clip0_10_9">
+<rect width="164" height="64" fill="white"/>
 </clipPath>
-<clipPath id="clip1_5:4">
-<rect width="155.789" height="155.789" fill="white" transform="translate(369.733 -8) rotate(32.9493)"/>
-</clipPath>
-<clipPath id="clip2_5:4">
-<rect width="106" height="122" fill="white" transform="translate(293 424) rotate(-90)"/>
+<clipPath id="clip1_10_9">
+<rect width="19.7476" height="19.7476" fill="white" transform="translate(49.7406 -2) rotate(32.9493)"/>
 </clipPath>
 </defs>
 </svg>

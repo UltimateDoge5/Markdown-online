@@ -1,11 +1,16 @@
-import { Link } from "react-router-dom";
-// import { ReactComponent as Logo } from "../svg/Logo.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { ReactComponent as Logo } from "../svg/logo.svg";
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
 	return (
 		<nav>
-			<span>Logo</span>
-			{/* <Logo /> */}
+			<Logo
+				onClick={() => {
+					navigate("/");
+				}}
+			/>
 			<div>
 				<Link to="/">Editor</Link>
 				<Link to="/cheatsheet">Cheat sheet</Link>
