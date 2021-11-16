@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ReactComponent as Logo } from "../svg/logo.svg";
+import { ReactComponent as Logo } from "../svg/Logo.svg";
 
 const Navbar = () => {
 	const navigate = useNavigate();
