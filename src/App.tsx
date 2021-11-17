@@ -6,7 +6,9 @@ import "./styles/snippet.css";
 import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
 
 function App() {
-	const [markdown, setMarkdown] = useState("# Welcome to Markdown online");
+	const [markdown, setMarkdown] = useState(
+		`# Welcome to Markdown online!\n\nMarkdown online is my implemantation of a markdown parser\n\n##List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Block quotes\n- Itallics, bolds and Both combined\n- Code blocks\n- Character escaping `
+	);
 	const outputRef = useRef<HTMLDivElement>(null);
 
 	if (outputRef.current != null) {
@@ -37,6 +39,7 @@ function App() {
 				<Snippet prefix="-" text="List element" />
 				<Snippet prefix=">" text="Block quote" />
 				<Snippet prefix="**" suffix="**" text="Bold" />
+				<Snippet prefix="`" suffix="`" text="Code" />
 			</aside>
 			<main>
 				<textarea
@@ -81,7 +84,25 @@ function App() {
 					autoFocus
 				></textarea>
 				<div ref={outputRef}>
-					<h1>Welcome to Markdown online</h1>
+					<h1> Welcome to Markdown online!</h1>
+
+					<p>Markdown online is my implemantation of a markdown parser.</p>
+
+					<h2> List of currently supported features</h2>
+					<ul>
+						<li> Headings</li>
+						<li> Paragraphs</li>
+						<li> Unorders lists</li>
+						<li> Block quotes</li>
+						<li>
+							<em>Itallics</em>, <b>bolds</b> and{" "}
+							<b>
+								<em>Both combined</em>
+							</b>
+						</li>
+						<li> Code blocks</li>
+						<li> Character escaping </li>
+					</ul>
 				</div>
 			</main>
 		</>
@@ -150,7 +171,7 @@ const parseMarkdown = (text: string): string => {
 							blockquote += "<br>";
 						}
 
-						blockquote += boldify(line.substr(1));
+						blockquote += line.substr(1);
 
 						if (afterLineBrake) {
 							blockquote += "</blockquote>";
@@ -174,7 +195,7 @@ const parseMarkdown = (text: string): string => {
 						paragraph += "<p>";
 					}
 
-					paragraph += boldify(line);
+					paragraph += line;
 
 					if (afterLineBrake) {
 						paragraph += "</p>";
