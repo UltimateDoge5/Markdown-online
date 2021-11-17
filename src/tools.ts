@@ -88,3 +88,66 @@ export const separateString = (string: string, character: string) => {
 
 	return parts;
 };
+
+/**
+ * Function will escape a character by replacing it with is corresponding code and thus remove it from markdown syntax parsing and will just appear as text.
+ * @param {string} string - A string to be escaped.
+ * @return {string} A string with escaped characters.
+ */
+export const escapeCharacters = (string: string) => {
+	const getCharacter = (character: string): string => {
+		switch (character) {
+			case "*":
+				return "&#42;";
+			case ">":
+				return "&#62;";
+			case "\\":
+				return "&#92;";
+			case "`":
+				return "&#96;";
+			case "{":
+				return "&#123;";
+			case "}":
+				return "&#125;";
+			case "[":
+				return "&#91;";
+			case "]":
+				return "&#93;";
+			case "(":
+				return "&#40;";
+			case ")":
+				return "&#41;";
+			case "#":
+				return "&#35;";
+			case "-":
+				return "&#45;";
+			case "!":
+				return "&#33;";
+			default:
+				return "";
+		}
+	};
+
+	let stringBuffer = "";
+
+	if (!string.includes("\\")) {
+		return string;
+	}
+
+	for (let i = 0; i < string.length; i++) {
+		if (string[i] === "\\") {
+			const char = getCharacter(string[i + 1]);
+			if (char === "") {
+				stringBuffer += string[i];
+				continue;
+			}
+
+			stringBuffer += char;
+			i++;
+		} else {
+			stringBuffer += string[i];
+		}
+	}
+
+	return stringBuffer;
+};
