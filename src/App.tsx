@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import Navbar from "./components/navbar";
 import "./styles/App.css";
 import "./styles/snippet.css";
-import { boldify, escapeCharacters, escapeCode } from "./tools";
+import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
 
 function App() {
 	const [markdown, setMarkdown] = useState("# Welcome to Markdown online");
@@ -95,8 +95,8 @@ const parseMarkdown = (text: string): string => {
 	return lines
 		.map((line, index) => {
 			line = escapeCharacters(line.trimLeft());
+			line = escapeCodeBlocks(line);
 			line = boldify(line);
-			line = escapeCode(line);
 
 			switch (line[0]) {
 				case "#":

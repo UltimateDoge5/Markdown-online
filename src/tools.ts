@@ -131,20 +131,23 @@ export const escapeCharacters = (string: string, escapeAny: boolean = false): st
 
 	let stringBuffer = "";
 
-	if (escapeAny || !string.includes("\\")) {
+	if (escapeAny === false && string.includes("\\") === false) {
 		return string;
 	}
 
 	for (let i = 0; i < string.length; i++) {
 		if (string[i] === "\\" || escapeAny) {
-			const char = getCharacter(string[i + 1]);
+			const char = getCharacter(string[escapeAny ? i : i + 1]);
+
 			if (char === "") {
 				stringBuffer += string[i];
 				continue;
 			}
 
 			stringBuffer += char;
-			i++;
+			if (escapeAny === false) {
+				i++;
+			}
 		} else {
 			stringBuffer += string[i];
 		}
@@ -157,7 +160,7 @@ export const escapeCharacters = (string: string, escapeAny: boolean = false): st
  * @param {string} string - A string to be styled.
  * @return {string} A string with formatted code blocks.
  */
-export const escapeCode = (string: string): string => {
+export const escapeCodeBlocks = (string: string): string => {
 	if (string.includes("`")) {
 		const sentences = separateString(string, "`");
 		const realSentences = sentences.filter((sentence) => sentence.trim() !== "`");
