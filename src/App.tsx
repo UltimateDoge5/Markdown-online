@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import Navbar from "./components/navbar";
 import "./styles/App.css";
 import "./styles/snippet.css";
-import { boldify, escapeCharacters } from "./tools";
+import { boldify, escapeCharacters, escapeCode } from "./tools";
 
 function App() {
 	const [markdown, setMarkdown] = useState("# Welcome to Markdown online");
@@ -95,6 +95,8 @@ const parseMarkdown = (text: string): string => {
 	return lines
 		.map((line, index) => {
 			line = escapeCharacters(line.trimLeft());
+			line = boldify(line);
+			line = escapeCode(line);
 
 			switch (line[0]) {
 				case "#":
@@ -126,7 +128,7 @@ const parseMarkdown = (text: string): string => {
 							listElement += "<ul>";
 						}
 
-						listElement += `<li>${boldify(line.substr(1))}</li>`;
+						listElement += `<li>${line.substr(1)}</li>`;
 
 						if (afterLineBrake) {
 							listElement += "</ul>";
@@ -134,7 +136,6 @@ const parseMarkdown = (text: string): string => {
 
 						return listElement;
 					})();
-
 				case ">":
 					//Wrap in an anonymous function to prevent block scoped variable name issues
 					return (() => {

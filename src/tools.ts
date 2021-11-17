@@ -66,7 +66,7 @@ export const boldify = (line: string): string => {
  * @param {string} character - The character to be used to divide the string.
  * @return {string[]} An array of strings that separated upon the character.
  */
-export const separateString = (string: string, character: string) => {
+export const separateString = (string: string, character: string): string[] => {
 	let parts = [];
 	let buffer = "";
 	for (let char of string) {
@@ -92,9 +92,10 @@ export const separateString = (string: string, character: string) => {
 /**
  * Function will escape a character by replacing it with is corresponding code and thus remove it from markdown syntax parsing and will just appear as text.
  * @param {string} string - A string to be escaped.
+ * @param {boolean} [escapeAny=false] - If true will escape any escapable character without the need for a `\` symbol.
  * @return {string} A string with escaped characters.
  */
-export const escapeCharacters = (string: string) => {
+export const escapeCharacters = (string: string, escapeAny: boolean = false): string => {
 	const getCharacter = (character: string): string => {
 		switch (character) {
 			case "*":
@@ -130,12 +131,12 @@ export const escapeCharacters = (string: string) => {
 
 	let stringBuffer = "";
 
-	if (!string.includes("\\")) {
+	if (escapeAny || !string.includes("\\")) {
 		return string;
 	}
 
 	for (let i = 0; i < string.length; i++) {
-		if (string[i] === "\\") {
+		if (string[i] === "\\" || escapeAny) {
 			const char = getCharacter(string[i + 1]);
 			if (char === "") {
 				stringBuffer += string[i];
@@ -150,4 +151,54 @@ export const escapeCharacters = (string: string) => {
 	}
 
 	return stringBuffer;
+};
+/**
+ * Function upon finding a string surrounded by `` ` `` characters will style it as code in its own block and escape any escapable characters.
+ * @param {string} string - A string to be styled.
+ * @return {string} A string with formatted code blocks.
+ */
+export const escapeCode = (string: string): string => {
+	if (string.includes("`")) {
+		const sentences = separateString(string, "`");
+		const realSentences = sentences.filter((sentence) => sentence.trim() !== "`");
+
+		return realSentences
+			.map((sentence) => {
+				const sentencePosition = sentences.indexOf(sentence);
+				let prefixes = 0;
+				let suffixes = 0;
+
+				//Go from the sentence to the beginning of the line and search for asterisks
+				for (let i = sentencePosition - 1; i >= 0; i--) {
+					const character = sentences[i].trim();
+
+					if (character === "`") {
+						prefixes++;
+					} else {
+						break;
+					}
+				}
+
+				//Go from the sentence to the end of the line and search for asterisks
+				for (let i = sentencePosition + 1; i < sentences.length; i++) {
+					const character = sentences[i].trim();
+
+					if (character === "`") {
+						suffixes++;
+					} else {
+						break;
+					}
+				}
+
+				if (prefixes > 0 && suffixes > 0) {
+					sentences.splice(sentencePosition - prefixes, suffixes + prefixes + 1);
+					return `<code>${escapeCharacters(sentence, true)}</code>`;
+				}
+
+				return sentence;
+			})
+			.join("");
+	}
+
+	return string;
 };
