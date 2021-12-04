@@ -18,7 +18,9 @@
 }
 
 :root {
-	--background: #0c0d26;
+	--primary: #3d6af2;
+	--background: #21262b;
+	--backgorund-light: #fff;
 }
 
 body {

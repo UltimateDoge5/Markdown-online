@@ -3,10 +3,11 @@ nav {
 	height: 64px;
 	border-bottom: 1px solid #cccccc;
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	font-size: 24px;
 	box-sizing: border-box;
+	background-color: var(--primary);
 }
 
 nav div {
@@ -19,7 +20,12 @@ nav div {
 
 nav a {
 	padding: 8px;
-	color: white;
+	color: #dddddd;
+	transition: color 0.2s ease;
+}
+
+nav a:hover {
+	color: #fff !important;
 }
 
 nav a:visited {

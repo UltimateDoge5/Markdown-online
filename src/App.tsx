@@ -7,7 +7,7 @@ import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
 
 function App() {
 	const [markdown, setMarkdown] = useState(
-		`# Welcome to Markdown online!\n\nMarkdown online is my implemantation of a markdown parser\n\n##List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Block quotes\n- Itallics, bolds and Both combined\n- Code blocks\n- Character escaping `
+		`# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- Code blocks\n- Character escaping `
 	);
 	const outputRef = useRef<HTMLDivElement>(null);
 
@@ -86,16 +86,16 @@ function App() {
 				<div ref={outputRef}>
 					<h1> Welcome to Markdown online!</h1>
 
-					<p>Markdown online is my implemantation of a markdown parser.</p>
+					<p>Markdown online is my implementation of a markdown parser.</p>
 
 					<h2> List of currently supported features</h2>
 					<ul>
 						<li> Headings</li>
 						<li> Paragraphs</li>
-						<li> Unorders lists</li>
-						<li> Block quotes</li>
+						<li> Unordered lists</li>
+						<li> Blockquotes</li>
 						<li>
-							<em>Itallics</em>, <b>bolds</b> and{" "}
+							<em>Italics</em>, <b>bolds</b> and{" "}
 							<b>
 								<em>Both combined</em>
 							</b>
