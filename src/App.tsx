@@ -1,49 +1,29 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Navbar from "./components/navbar";
-import "./styles/App.css";
-import "./styles/snippet.css";
 import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
+import "./styles/App.css";
 
 function App() {
-	const [markdown, setMarkdown] = useState(
-		`# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- Code blocks\n- Character escaping `
-	);
+	const [markdown, setMarkdown] = useState("");
 	const outputRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		setMarkdown(
+			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping"
+		);
+	}, []);
 
 	if (outputRef.current != null) {
 		outputRef.current.innerHTML = parseMarkdown(markdown);
 	}
 
-	const Snippet = ({ prefix, suffix = "", text }: SnippetProps) => {
-		return (
-			<div
-				className="snippet"
-				onClick={() => {
-					setMarkdown(markdown + "\n" + prefix + text + suffix);
-				}}
-			>
-				<span>
-					<span>{prefix}</span> {text} <span>{suffix}</span>
-				</span>
-			</div>
-		);
-	};
-
 	return (
 		<>
 			<Navbar />
-			<aside id="cheatsheet">
-				<h1>Cheatsheet</h1>
-				<Snippet prefix="#" text="Header" />
-				<Snippet prefix="-" text="List element" />
-				<Snippet prefix=">" text="Block quote" />
-				<Snippet prefix="**" suffix="**" text="Bold" />
-				<Snippet prefix="`" suffix="`" text="Code" />
-			</aside>
 			<main>
 				<textarea
-					wrap="off"
+					wrap="on"
 					onKeyDown={(e) => {
 						const textarea = e.target as HTMLTextAreaElement;
 						switch (e.key) {
@@ -83,27 +63,7 @@ function App() {
 					value={markdown}
 					autoFocus
 				></textarea>
-				<div ref={outputRef}>
-					<h1> Welcome to Markdown online!</h1>
-
-					<p>Markdown online is my implementation of a markdown parser.</p>
-
-					<h2> List of currently supported features</h2>
-					<ul>
-						<li> Headings</li>
-						<li> Paragraphs</li>
-						<li> Unordered lists</li>
-						<li> Blockquotes</li>
-						<li>
-							<em>Italics</em>, <b>bolds</b> and{" "}
-							<b>
-								<em>Both combined</em>
-							</b>
-						</li>
-						<li> Code blocks</li>
-						<li> Character escaping </li>
-					</ul>
-				</div>
+				<div ref={outputRef}></div>
 			</main>
 		</>
 	);
