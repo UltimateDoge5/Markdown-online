@@ -21,6 +21,7 @@ function App() {
 	return (
 		<>
 			<Navbar />
+			<div></div>
 			<main>
 				<textarea
 					wrap="on"
