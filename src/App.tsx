@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/navbar";
 import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
 import "./styles/App.css";
+import Toggle from "./components/toggle";
 
-function App() {
+const App = () => {
 	const [markdown, setMarkdown] = useState("");
 	const [darkMode, setDarkMode] = useState(false);
 	const outputRef = useRef<HTMLDivElement>(null);
@@ -14,15 +15,27 @@ function App() {
 			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping"
 		);
 
-		setDarkMode(window.matchMedia("prefers-color-scheme: dark").matches);
+		if (localStorage.getItem("darkMode") === "true") {
+			setDarkMode(true);
+		} else {
+			setDarkMode(window.matchMedia("prefers-color-scheme: dark").matches);
+		}
 
 		window.matchMedia("prefers-color-scheme: dark").addEventListener("change", (e) => {
-			setDarkMode(e.matches);
+			if (localStorage.getItem("darkMode") === "true") {
+				setDarkMode(true);
+			} else {
+				setDarkMode(e.matches);
+			}
 		});
 
 		return () => {
 			window.matchMedia("prefers-color-scheme: dark").removeEventListener("change", (e) => {
-				setDarkMode(e.matches);
+				if (localStorage.getItem("darkMode") === "true") {
+					setDarkMode(true);
+				} else {
+					setDarkMode(e.matches);
+				}
 			});
 		};
 	}, []);
@@ -34,7 +47,15 @@ function App() {
 	return (
 		<>
 			<Navbar />
-			<div className={darkMode ? "dark" : "light"}></div>
+			<div className={darkMode ? "dark" : "light"}>
+				<Toggle
+					label="Dark mode"
+					onChange={(enabled) => {
+						setDarkMode(enabled);
+						localStorage.setItem("darkMode", enabled.toString());
+					}}
+				/>
+			</div>
 			<main className={darkMode ? "dark" : "light"}>
 				<textarea
 					wrap="on"
@@ -81,7 +102,7 @@ function App() {
 			</main>
 		</>
 	);
-}
+};
 
 const parseMarkdown = (text: string): string => {
 	//Parse markdown to html elements string

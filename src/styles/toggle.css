@@ -1,0 +1,28 @@
+.toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	height: 1.5rem;
+	width: 2.75rem;
+	border-radius: 9999px;
+	border: 0;
+	transition: background-color 0.2s ease-in-out;
+}
+
+.toggle span {
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	background-color: white;
+	border-radius: 9999px;
+	transition: transform 0.2s ease-in-out;
+}
+
+.toggleLabel {
+	margin-right: 8px;
+}
+
+.toggleGroup {
+	display: flex;
+	align-items: center;
+}
