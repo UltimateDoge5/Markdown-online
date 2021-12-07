@@ -9,8 +9,8 @@ main div {
 	width: 50%;
 	padding: 2px;
 	min-height: 50vh;
-	background-color: var(--background-light);
-	color: var(--background);
+	background-color: inherit;
+	color: inherit;
 	overflow: visible;
 }
 

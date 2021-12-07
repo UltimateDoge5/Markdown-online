@@ -19,9 +19,18 @@
 
 :root {
 	--primary: #3d6af2;
-	--primary-light: #4d92ff;
-	--background: #21262b;
-	--backgorund-light: #fff;
+	--dark: #21262b;
+	--light: #fff;
+}
+
+.dark {
+	color: var(--light) !important;
+	background-color: var(--dark);
+}
+
+.light {
+	color: var(--dark);
+	background-color: var(--light);
 }
 
 body {
@@ -35,8 +44,8 @@ body,
 #root {
 	width: 100vw;
 	min-height: 100vh;
-	background-color: var(--backgorund-light);
-	color: var(--background);
+	background-color: var(--light);
+	color: var(--dark);
 }
 
 code {

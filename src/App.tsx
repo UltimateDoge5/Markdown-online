@@ -6,12 +6,25 @@ import "./styles/App.css";
 
 function App() {
 	const [markdown, setMarkdown] = useState("");
+	const [darkMode, setDarkMode] = useState(false);
 	const outputRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		setMarkdown(
 			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping"
 		);
+
+		setDarkMode(window.matchMedia("prefers-color-scheme: dark").matches);
+
+		window.matchMedia("prefers-color-scheme: dark").addEventListener("change", (e) => {
+			setDarkMode(e.matches);
+		});
+
+		return () => {
+			window.matchMedia("prefers-color-scheme: dark").removeEventListener("change", (e) => {
+				setDarkMode(e.matches);
+			});
+		};
 	}, []);
 
 	if (outputRef.current != null) {
@@ -21,8 +34,8 @@ function App() {
 	return (
 		<>
 			<Navbar />
-			<div></div>
-			<main>
+			<div className={darkMode ? "dark" : "light"}></div>
+			<main className={darkMode ? "dark" : "light"}>
 				<textarea
 					wrap="on"
 					onKeyDown={(e) => {
