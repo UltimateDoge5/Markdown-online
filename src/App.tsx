@@ -7,19 +7,14 @@ import Toggle from "./components/toggle";
 
 const App = () => {
 	const [markdown, setMarkdown] = useState("");
-	const [darkMode, setDarkMode] = useState(false);
+	const [markerOffset, setMarkerOffset] = useState({ position: 0 });
+	const [darkMode, setDarkMode] = useState(fetchDarkModePrefference());
 	const outputRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		setMarkdown(
 			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping"
 		);
-
-		if (localStorage.getItem("darkMode") === "true") {
-			setDarkMode(true);
-		} else {
-			setDarkMode(window.matchMedia("prefers-color-scheme: dark").matches);
-		}
 
 		window.matchMedia("prefers-color-scheme: dark").addEventListener("change", (e) => {
 			if (localStorage.getItem("darkMode") === "true") {
@@ -50,6 +45,7 @@ const App = () => {
 			<div className={darkMode ? "dark" : "light"}>
 				<Toggle
 					label="Dark mode"
+					state={darkMode}
 					onChange={(enabled) => {
 						setDarkMode(enabled);
 						localStorage.setItem("darkMode", enabled.toString());
@@ -57,48 +53,69 @@ const App = () => {
 				/>
 			</div>
 			<main className={darkMode ? "dark" : "light"}>
-				<textarea
-					wrap="on"
-					onKeyDown={(e) => {
-						const textarea = e.target as HTMLTextAreaElement;
-						switch (e.key) {
-							case "Tab":
-								e.preventDefault();
-								textarea.value =
-									textarea.value.substring(0, textarea.selectionStart) +
-									"    " +
-									textarea.value.substring(textarea.selectionStart, textarea.value.length);
-								textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + "    ".length;
-								break;
-							case "Backspace":
-								if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
+				<div className="textarea">
+					<div
+						id="lineMarker"
+						style={{
+							transform: `translateY(${markerOffset.position * 24}px)`
+						}}
+					></div>
+					<textarea
+						wrap="on"
+						onKeyDown={(e) => {
+							const textarea = e.target as HTMLTextAreaElement;
+							switch (e.key) {
+								case "Tab":
+									e.preventDefault();
 									textarea.value =
-										textarea.value.substring(0, textarea.selectionStart - 3) +
+										textarea.value.substring(0, textarea.selectionStart) +
+										"    " +
 										textarea.value.substring(textarea.selectionStart, textarea.value.length);
-									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
-								}
-								break;
-							case "LeftArrow":
-								if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
-									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
-								}
-								break;
-							case "RightArrow":
-								if (textarea.value.substring(textarea.selectionStart + 4, textarea.selectionStart) === "    ") {
-									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + 3;
-								}
-								break;
-						}
+									textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + "    ".length;
+									break;
+								case "Backspace":
+									if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
+										textarea.value =
+											textarea.value.substring(0, textarea.selectionStart - 3) +
+											textarea.value.substring(textarea.selectionStart, textarea.value.length);
+										textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
+									}
+									break;
+								case "LeftArrow":
+									if (textarea.value.substring(textarea.selectionStart - 4, textarea.selectionStart) === "    ") {
+										textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart - 3;
+									}
+									break;
+								case "RightArrow":
+									if (textarea.value.substring(textarea.selectionStart + 4, textarea.selectionStart) === "    ") {
+										textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + 3;
+									}
+									break;
+							}
 
-						setMarkdown(textarea.value);
-					}}
-					onChange={(e) => {
-						setMarkdown(e.target.value);
-					}}
-					value={markdown}
-					autoFocus
-				></textarea>
-				<div ref={outputRef}></div>
+							setMarkdown(textarea.value);
+						}}
+						onKeyUp={(e) => {
+							const textarea = e.target as HTMLTextAreaElement;
+							setMarkerOffset({
+								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+							});
+						}}
+						onChange={(e) => {
+							setMarkdown(e.target.value);
+						}}
+						onClick={(e) => {
+							const textarea = e.target as HTMLTextAreaElement;
+							setMarkerOffset({
+								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+							});
+						}}
+						value={markdown}
+						autoFocus
+					></textarea>
+				</div>
+
+				<div id="render" ref={outputRef}></div>
 			</main>
 		</>
 	);
@@ -200,6 +217,14 @@ const parseMarkdown = (text: string): string => {
 			}
 		})
 		.join("\n");
+};
+
+const fetchDarkModePrefference = () => {
+	if (localStorage.getItem("darkMode") === "true") {
+		return true;
+	} else {
+		return window.matchMedia("prefers-color-scheme: dark").matches;
+	}
 };
 
 export default App;
