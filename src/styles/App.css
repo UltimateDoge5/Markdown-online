@@ -6,15 +6,48 @@ main {
 
 main > div {
 	width: 50%;
-	padding: 2px;
 	min-height: 50vh;
 	background-color: inherit;
 	color: inherit;
 	overflow: visible;
 }
 
+#lineCounter {
+	padding-top: 2px;
+	width: 5%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: inherit;
+	color: inherit;
+	filter: brightness(1.1);
+	overflow: auto;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+#lineCounter::-webkit-scrollbar {
+	display: none;
+}
+
+#lineCounter.light {
+	filter: brightness(0.9);
+	min-height: 100%;
+}
+
+#lineCounter span {
+	height: 24px;
+	min-height: 24px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-feature-settings: "tnum" on, "lnum" on;
+}
+
 main textarea {
-	width: 100%;
+	width: 95%;
 	height: 100%;
 	resize: none;
 	line-height: 1.5;
@@ -42,6 +75,8 @@ main > #render {
 
 main > #textarea {
 	position: relative;
+	display: flex;
+	justify-content: center;
 }
 
 #lineMarker {
@@ -49,9 +84,8 @@ main > #textarea {
 	left: 0;
 	background-color: dodgerblue;
 	opacity: 0.33;
-	transition: transform 0.1s;
 	height: 24px;
-	width: calc(50% - 3px);
+	width: 100%;
 }
 
 blockquote {
@@ -68,7 +102,7 @@ blockquote > blockquote {
 code {
 	background-color: rgba(175, 184, 193, 0.2);
 	padding: 2px;
-	border-radius: 6px;
+	border-radius: 4px;
 	text-align: center;
 }
 
