@@ -11,6 +11,7 @@ const App = () => {
 	const [darkMode, setDarkMode] = useState(fetchDarkModePrefference());
 	const outputRef = useRef<HTMLDivElement>(null);
 	const lineCounter = useRef<HTMLDivElement>(null);
+	const textArea = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
 		setMarkdown(
@@ -40,8 +41,22 @@ const App = () => {
 		outputRef.current.innerHTML = parseMarkdown(markdown);
 	}
 
-	console.log(calculateHeight(document.querySelector("textarea") as HTMLTextAreaElement));
+	const getLineNumbers = () => {
+		const textAreaWidth = textArea.current?.offsetWidth || 0;
 
+		return markdown.split("\n").map((line, index) => {
+			if (line.length > (textAreaWidth - 10) / 16) {
+				const lineHeight = Math.floor(line.length / ((textAreaWidth - 10) / 16));
+				return (
+					<span key={index} style={lineHeight > 1 ? { minHeight: `${lineHeight * 24}px`, alignItems: "start" } : {}}>
+						{index + 1}
+					</span>
+				);
+			}
+
+			return <span key={index}>{index + 1}</span>;
+		});
+	};
 	return (
 		<>
 			<Navbar />
@@ -58,18 +73,19 @@ const App = () => {
 			<main className={darkMode ? "dark" : "light"}>
 				<div id="textarea">
 					<div id="lineCounter" className={darkMode ? "dark" : "light"} ref={lineCounter}>
-						{console.log(markdown.split("\n").length)}
-						{markdown.split("\n").map((line, index) => {
-							return <span key={index}>{index + 1}</span>;
-						})}
+						{getLineNumbers()}
 					</div>
 					<div
 						id="lineMarker"
 						style={{
-							transform: `translateY(${markerOffset.position * 24}px)`
+							transform: `translateY(${markerOffset.position * 24}px)`,
+							width: `${
+								(textArea.current as HTMLTextAreaElement)?.scrollHeight > (textArea.current as HTMLTextAreaElement)?.offsetWidth ? 98.2 : 100
+							}%`
 						}}
 					></div>
 					<textarea
+						ref={textArea}
 						wrap="on"
 						onKeyDown={(e) => {
 							const textarea = e.target as HTMLTextAreaElement;
@@ -248,50 +264,50 @@ const fetchDarkModePrefference = () => {
 	}
 };
 
-var calculateContentHeight = function (textArea: HTMLTextAreaElement, scanAmount = 24): number {
-	var origHeight = textArea.style.height,
-		height = textArea.offsetHeight,
-		scrollHeight = textArea.scrollHeight,
-		overflow = textArea.style.overflow;
-	/// only bother if the ta is bigger than content
-	if (height >= scrollHeight) {
-		/// check that our browser supports changing dimension
-		/// calculations mid-way through a function call...
-		textArea.style.height = height + scanAmount + "px";
-		/// because the scrollbar can cause calculation problems
-		textArea.style.overflow = "hidden";
-		/// by checking that scrollHeight has updated
-		if (scrollHeight < textArea.scrollHeight) {
-			/// now try and scan the ta's height downwards
-			/// until scrollHeight becomes larger than height
-			while (textArea.offsetHeight >= textArea.scrollHeight) {
-				textArea.style.height = (height -= scanAmount) + "px";
-			}
-			/// be more specific to get the exact height
-			while (textArea.offsetHeight < textArea.scrollHeight) {
-				textArea.style.height = height++ + "px";
-			}
-			/// reset the ta back to it's original height
-			textArea.style.height = origHeight;
-			/// put the overflow back
-			textArea.style.overflow = overflow;
-			return height;
-		}
-	}
-	return scrollHeight;
-};
+// const calculateContentHeight = function (textArea: HTMLTextAreaElement, scanAmount = 24): number {
+// 	let origHeight = textArea.style.height,
+// 		height = textArea.offsetHeight,
+// 		scrollHeight = textArea.scrollHeight,
+// 		overflow = textArea.style.overflow;
+// 	/// only bother if the ta is bigger than content
+// 	if (height >= scrollHeight) {
+// 		/// check that our browser supports changing dimension
+// 		/// calculations mid-way through a function call...
+// 		textArea.style.height = height + scanAmount + "px";
+// 		/// because the scrollbar can cause calculation problems
+// 		textArea.style.overflow = "hidden";
+// 		/// by checking that scrollHeight has updated
+// 		if (scrollHeight < textArea.scrollHeight) {
+// 			/// now try and scan the ta's height downwards
+// 			/// until scrollHeight becomes larger than height
+// 			while (textArea.offsetHeight >= textArea.scrollHeight) {
+// 				textArea.style.height = (height -= scanAmount) + "px";
+// 			}
+// 			/// be more specific to get the exact height
+// 			while (textArea.offsetHeight < textArea.scrollHeight) {
+// 				textArea.style.height = height++ + "px";
+// 			}
+// 			/// reset the ta back to it's original height
+// 			textArea.style.height = origHeight;
+// 			/// put the overflow back
+// 			textArea.style.overflow = overflow;
+// 			return height;
+// 		}
+// 	}
+// 	return scrollHeight;
+// };
 
-var calculateHeight = function (textArea: HTMLTextAreaElement) {
-	const style = window.getComputedStyle ? window.getComputedStyle(textArea) : textArea.style;
-	// This will get the line-height only if it is set in the css,
-	// otherwise it's "normal"
-	const taLineHeight = parseInt(style.lineHeight, 10);
-	// Get the scroll height of the textarea
-	const taHeight = calculateContentHeight(textArea, taLineHeight);
-	// calculate the number of lines
-	const numberOfLines = Math.ceil(taHeight / taLineHeight);
+// var calculateHeight = function (textArea: HTMLTextAreaElement) {
+// 	const style = window.getComputedStyle ? window.getComputedStyle(textArea) : textArea.style;
+// 	// This will get the line-height only if it is set in the css,
+// 	// otherwise it's "normal"
+// 	const taLineHeight = parseInt(style.lineHeight, 10);
+// 	// Get the scroll height of the textarea
+// 	const taHeight = calculateContentHeight(textArea, taLineHeight);
+// 	// calculate the number of lines
+// 	const numberOfLines = Math.ceil(taHeight / taLineHeight);
 
-	return "there are " + numberOfLines + " lines in the text area";
-};
+// 	return "there are " + numberOfLines + " lines in the text area";
+// };
 
 export default App;
