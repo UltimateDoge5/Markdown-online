@@ -42,11 +42,12 @@ const App = () => {
 	}
 
 	const getLineNumbers = () => {
-		const textAreaWidth = textArea.current?.offsetWidth || 0;
+		const textAreaWidth = textArea.current?.getBoundingClientRect().width || 0;
 
 		return markdown.split("\n").map((line, index) => {
-			if (line.length > (textAreaWidth - 10) / 16) {
-				const lineHeight = Math.floor(line.length / ((textAreaWidth - 10) / 16));
+			if (Math.floor((line.length * 16) / 1.91) > textAreaWidth - 10) {
+				// If the line is too long, we need to add a line break
+				const lineHeight = Math.round((line.length * 16) / 1.91 / (textAreaWidth - 10));
 				return (
 					<span key={index} style={lineHeight > 1 ? { minHeight: `${lineHeight * 24}px`, alignItems: "start" } : {}}>
 						{index + 1}
@@ -184,7 +185,7 @@ const parseMarkdown = (text: string): string => {
 						return `<p>${line}</p>`;
 					}
 
-					return `<h${heading}>${line.substr(heading)}</h${heading}>`;
+					return `<h${heading}>${line.substring(heading)}</h${heading}>`;
 				case "-":
 					//Wrap in an anonymous function to prevent block scoped variable name issues
 					if (line[1] !== " ") return line;
@@ -198,7 +199,7 @@ const parseMarkdown = (text: string): string => {
 							listElement += "<ul>";
 						}
 
-						listElement += `<li>${line.substr(1)}</li>`;
+						listElement += `<li>${line.substring(1)}</li>`;
 
 						if (afterLineBrake) {
 							listElement += "</ul>";
@@ -231,7 +232,7 @@ const parseMarkdown = (text: string): string => {
 				default:
 					if (line.length === 0) return "";
 
-					const lineBrake = index - 1 >= 0 ? lines[index - 1].substr(lines[index - 1].length - 2) === "  " : false;
+					const lineBrake = index - 1 >= 0 ? lines[index - 1].substring(lines[index - 1].length - 2) === "  " : false;
 					const preLineBrake = index - 1 >= 0 ? lines[index - 1] === "" : true;
 					const afterLineBrake = index + 1 < lines.length ? lines[index + 1] === "" : true;
 					let paragraph = "";
@@ -263,51 +264,5 @@ const fetchDarkModePrefference = () => {
 		return window.matchMedia("prefers-color-scheme: dark").matches;
 	}
 };
-
-// const calculateContentHeight = function (textArea: HTMLTextAreaElement, scanAmount = 24): number {
-// 	let origHeight = textArea.style.height,
-// 		height = textArea.offsetHeight,
-// 		scrollHeight = textArea.scrollHeight,
-// 		overflow = textArea.style.overflow;
-// 	/// only bother if the ta is bigger than content
-// 	if (height >= scrollHeight) {
-// 		/// check that our browser supports changing dimension
-// 		/// calculations mid-way through a function call...
-// 		textArea.style.height = height + scanAmount + "px";
-// 		/// because the scrollbar can cause calculation problems
-// 		textArea.style.overflow = "hidden";
-// 		/// by checking that scrollHeight has updated
-// 		if (scrollHeight < textArea.scrollHeight) {
-// 			/// now try and scan the ta's height downwards
-// 			/// until scrollHeight becomes larger than height
-// 			while (textArea.offsetHeight >= textArea.scrollHeight) {
-// 				textArea.style.height = (height -= scanAmount) + "px";
-// 			}
-// 			/// be more specific to get the exact height
-// 			while (textArea.offsetHeight < textArea.scrollHeight) {
-// 				textArea.style.height = height++ + "px";
-// 			}
-// 			/// reset the ta back to it's original height
-// 			textArea.style.height = origHeight;
-// 			/// put the overflow back
-// 			textArea.style.overflow = overflow;
-// 			return height;
-// 		}
-// 	}
-// 	return scrollHeight;
-// };
-
-// var calculateHeight = function (textArea: HTMLTextAreaElement) {
-// 	const style = window.getComputedStyle ? window.getComputedStyle(textArea) : textArea.style;
-// 	// This will get the line-height only if it is set in the css,
-// 	// otherwise it's "normal"
-// 	const taLineHeight = parseInt(style.lineHeight, 10);
-// 	// Get the scroll height of the textarea
-// 	const taHeight = calculateContentHeight(textArea, taLineHeight);
-// 	// calculate the number of lines
-// 	const numberOfLines = Math.ceil(taHeight / taLineHeight);
-
-// 	return "there are " + numberOfLines + " lines in the text area";
-// };
 
 export default App;
