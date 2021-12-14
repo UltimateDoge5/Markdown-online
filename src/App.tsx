@@ -7,7 +7,7 @@ import Toggle from "./components/toggle";
 
 const App = () => {
 	const [markdown, setMarkdown] = useState("");
-	const [markerOffset, setMarkerOffset] = useState({ position: 0 });
+	const [markerOffset, setMarkerOffset] = useState({ position: 0, scroll: 0 });
 	const [darkMode, setDarkMode] = useState(fetchDarkModePrefference());
 	const outputRef = useRef<HTMLDivElement>(null);
 	const lineCounter = useRef<HTMLDivElement>(null);
@@ -49,7 +49,7 @@ const App = () => {
 				// If the line is too long, we need to add a line break
 				const lineHeight = Math.round((line.length * 16) / 1.91 / (textAreaWidth - 10));
 				return (
-					<span key={index} style={lineHeight > 1 ? { minHeight: `${lineHeight * 24}px`, alignItems: "start" } : {}}>
+					<span key={index} style={lineHeight > 1 ? { minHeight: `${lineHeight * 24}px`, alignItems: "start", padding: "2px" } : {}}>
 						{index + 1}
 					</span>
 				);
@@ -72,14 +72,14 @@ const App = () => {
 				/>
 			</div>
 			<main className={darkMode ? "dark" : "light"}>
-				<div id="textarea">
+				<div id="editor">
 					<div id="lineCounter" className={darkMode ? "dark" : "light"} ref={lineCounter}>
 						{getLineNumbers()}
 					</div>
 					<div
 						id="lineMarker"
 						style={{
-							transform: `translateY(${markerOffset.position * 24}px)`,
+							transform: `translateY(${markerOffset.position * 24 - markerOffset.scroll}px)`,
 							width: `${
 								(textArea.current as HTMLTextAreaElement)?.scrollHeight > (textArea.current as HTMLTextAreaElement)?.offsetWidth ? 98.2 : 100
 							}%`
@@ -120,6 +120,7 @@ const App = () => {
 									break;
 							}
 							setMarkerOffset({
+								...markerOffset,
 								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
 							});
 							setMarkdown(textarea.value);
@@ -127,12 +128,14 @@ const App = () => {
 						onInput={(e) => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
+								...markerOffset,
 								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
 							});
 						}}
 						onKeyUp={(e) => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
+								...markerOffset,
 								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
 							});
 						}}
@@ -142,10 +145,13 @@ const App = () => {
 						onClick={(e) => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
+								...markerOffset,
 								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
 							});
 						}}
 						onScroll={(e) => {
+							setMarkerOffset({ ...markerOffset, scroll: (e.target as HTMLTextAreaElement).scrollTop });
+
 							(lineCounter.current as HTMLDivElement).scrollTop = (e.target as HTMLTextAreaElement).scrollTop;
 						}}
 						value={markdown}

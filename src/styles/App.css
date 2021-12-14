@@ -44,6 +44,7 @@ main > div {
 	justify-content: center;
 	align-items: center;
 	font-feature-settings: "tnum" on, "lnum" on;
+	box-sizing: border-box;
 }
 
 main textarea {
@@ -73,10 +74,11 @@ main > #render {
 	overflow: auto;
 }
 
-main > #textarea {
+main > #editor {
 	position: relative;
 	display: flex;
 	justify-content: center;
+	overflow: hidden;
 }
 
 #lineMarker {
