@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Navbar from "./components/navbar";
-import { boldify, escapeCharacters, escapeCodeBlocks } from "./tools";
+import { boldify, calculateSelectedLine, escapeCharacters, escapeCodeBlocks } from "./tools";
 import "./styles/App.css";
 import Toggle from "./components/toggle";
 
@@ -46,8 +46,8 @@ const App = () => {
 
 		return markdown.split("\n").map((line, index) => {
 			if (Math.floor((line.length * 16) / 1.91) > textAreaWidth - 10) {
-				// If the line is too long, we need to add a line break
-				const lineHeight = Math.round((line.length * 16) / 1.91 / (textAreaWidth - 10));
+				// If the line is too long, extend the line number
+				const lineHeight = Math.floor((line.length * 16) / 1.91 / (textAreaWidth - 10));
 				return (
 					<span key={index} style={lineHeight > 1 ? { minHeight: `${lineHeight * 24}px`, alignItems: "start", padding: "2px" } : {}}>
 						{index + 1}
@@ -121,7 +121,7 @@ const App = () => {
 							}
 							setMarkerOffset({
 								...markerOffset,
-								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+								position: calculateSelectedLine(textarea)
 							});
 							setMarkdown(textarea.value);
 						}}
@@ -129,14 +129,14 @@ const App = () => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
 								...markerOffset,
-								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+								position: calculateSelectedLine(textarea)
 							});
 						}}
 						onKeyUp={(e) => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
 								...markerOffset,
-								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+								position: calculateSelectedLine(textarea)
 							});
 						}}
 						onChange={(e) => {
@@ -146,7 +146,7 @@ const App = () => {
 							const textarea = e.target as HTMLTextAreaElement;
 							setMarkerOffset({
 								...markerOffset,
-								position: textarea.value.substring(0, textarea.selectionStart).split("\n").length - 1
+								position: calculateSelectedLine(textarea)
 							});
 						}}
 						onScroll={(e) => {

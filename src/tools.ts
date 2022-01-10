@@ -205,3 +205,28 @@ export const escapeCodeBlocks = (string: string): string => {
 
 	return string;
 };
+
+/**
+ * Function counts the number of lines including multilines, to the selected position on the textarea.
+ * @param {HTMLTextAreaElement} textarea - A textarea element to be counted.
+ * @return {number} Number of lines that the marker has to be offset.
+ */
+export const calculateSelectedLine = (textarea: HTMLTextAreaElement): number => {
+	const textLines = textarea.value.substring(0, textarea.selectionStart).split("\n");
+	const selectedLine = textLines.length - 1;
+	const textAreaWidth = textarea.getBoundingClientRect().width;
+
+	let lineOffset = 0;
+
+	for (let i = 0; i < selectedLine; i++) {
+		const line = textLines[i];
+
+		if (Math.floor((line.length * 16) / 1.91) > textAreaWidth - 10) {
+			// If the text is wider than one line, increase the offset
+			lineOffset += Math.floor((line.length * 16) / 1.91 / (textAreaWidth - 10)) - 1;
+		}
+
+		lineOffset++;
+	}
+	return lineOffset;
+};
