@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Navbar from "./components/navbar";
-import { boldify, calculateSelectedLine, escapeCharacters, escapeCodeBlocks } from "./tools";
+import { boldify, calculateSelectedLine, escapeCharacters, escapeCodeBlocks, parseLinks } from "./tools";
 import "./styles/App.css";
 import Toggle from "./components/toggle";
 
@@ -15,7 +15,7 @@ const App = () => {
 
 	useEffect(() => {
 		setMarkdown(
-			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping"
+			"# Welcome to Markdown online!\n\nMarkdown online is my implementation of a markdown parser\n\n## List of currently supported features\n- Headings\n- Paragraphs\n- Unordered lists\n- Blockquotes\n- *Italics*, **bolds** and ***Both combined***\n- `Code blocks`\n- Character escaping\n- [Links](https://markdown.pkozak.org/)"
 		);
 
 		window.matchMedia("prefers-color-scheme: dark").addEventListener("change", (e) => {
@@ -174,6 +174,7 @@ const parseMarkdown = (text: string): string => {
 			line = escapeCharacters(line.trimLeft());
 			line = escapeCodeBlocks(line);
 			line = boldify(line);
+			line = parseLinks(line);
 
 			switch (line[0]) {
 				case "#":

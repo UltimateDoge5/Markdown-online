@@ -207,6 +207,19 @@ export const escapeCodeBlocks = (string: string): string => {
 };
 
 /**
+ * The function that returns a string with the syntax of a link replaced by html link.
+ * @param {string} string - A string to be esaped.
+ * @return {string} String with potentially parsed links.
+ */
+export const parseLinks = (string: string) => {
+	const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+	return string.replace(linkRegex, (_match, text: string, url: string) => {
+		return `<a href="${url}" target="_blank">${text}</a>`;
+	});
+};
+
+/**
  * Function counts the number of lines including multilines, to the selected position on the textarea.
  * @param {HTMLTextAreaElement} textarea - A textarea element to be counted.
  * @return {number} Number of lines that the marker has to be offset.

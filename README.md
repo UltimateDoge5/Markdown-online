@@ -19,6 +19,7 @@ List of currently supported features:
 - *Italics*, **bolds** and ***Both combined***
 - `Code`
 - Character escaping
+- [Links](https://markdown.pkozak.org/)
 
 # Sources
 - [Basic markdown syntax](https://www.markdownguide.org/basic-syntax/)

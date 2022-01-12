@@ -74,6 +74,14 @@ main > #render {
 	overflow: auto;
 }
 
+#render a {
+	color: dodgerblue;
+}
+
+#render a:visited {
+	color: dodgerblue;
+}
+
 main > #editor {
 	position: relative;
 	display: flex;
